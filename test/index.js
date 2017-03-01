@@ -39,6 +39,10 @@ describe('hexo-generator-category-feed', function() {
         });
     });
 
+    beforeEach(function() {
+        hexo.config.title = 'Hexo';
+    });
+
     it('generates RSS2 feeds', function() {
         hexo.config.feed = {
             format: 'rss2'
@@ -65,5 +69,25 @@ describe('hexo-generator-category-feed', function() {
         result[0].path.should.eql("/categories/javascript/atom.xml");
         result[1].path.should.eql("/categories/web/atom.xml");
         result[2].path.should.eql("/categories/windows/atom.xml");
+    });
+
+    it('generates RSS2 feed with proper title', function() {
+        hexo.config.feed = { format: 'rss2' };
+
+        generator(locals)[0].data.should.contain('<title>Hexo</title>');
+
+        hexo.config.title = 'Custom title';
+
+        generator(locals)[0].data.should.contain('<title>Custom title</title>');
+    });
+
+    it('generates Atom feed with proper title', function() {
+        hexo.config.feed = { format: 'atom' };
+
+        generator(locals)[0].data.should.contain('<title>Hexo</title>');
+
+        hexo.config.title = 'Custom title for atom format';
+
+        generator(locals)[0].data.should.contain('<title>Custom title for atom format</title>');
     });
 });
