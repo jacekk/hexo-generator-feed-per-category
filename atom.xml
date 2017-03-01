@@ -2,11 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>{{ config.title | e }}</title>
     {% if config.subtitle %}<subtitle>{{ config.subtitle | e }}</subtitle>{% endif %}
-    <link href="{{ feed_url | uriencode }}" rel="self"/>
+    <link href="{{ config.url }}{{ feed_url | uriencode }}" rel="self"/>
     {% if config.feed.hub %}<link href="{{ config.feed.hub | uriencode }}" rel="hub"/>{% endif %}
     <link href="{{ url | uriencode }}"/>
     <updated>{{ posts.first().updated.toISOString() }}</updated>
-    <id>{{ category_url }}</id>
+    <id>{{ config.url }}{{ category_url }}</id>
     {% if config.author %}
     <author>
         <name>{{ config.author | e }}</name>

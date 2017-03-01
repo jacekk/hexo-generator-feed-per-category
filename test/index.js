@@ -23,9 +23,9 @@ describe('hexo-generator-category-feed', function() {
 
     before(function() {
         return Post.insert([
-            { source: 'foo1', slug: 'foo1', date: 1e8 },
-            { source: 'foo2', slug: 'foo2', date: 1e8 +1 },
-            { source: 'foo3', slug: 'foo3', date: 1e8 -1 },
+            { title: 'foo 1', source: 'foo1', slug: 'foo1', date: new Date() },
+            { title: 'foo 2', source: 'foo2', slug: 'foo2', date: new Date() },
+            { title: 'foo 3', source: 'foo3', slug: 'foo3', date: new Date() },
         ]).then(function(data) {
             posts = data;
 
@@ -89,5 +89,16 @@ describe('hexo-generator-category-feed', function() {
         hexo.config.title = 'Custom title for atom format';
 
         generator(locals)[0].data.should.contain('<title>Custom title for atom format</title>');
+    });
+
+    it('generates Atom feed with some proper attributes', function() {
+        var firstCategory = '/categories/javascript/';
+        var result = generator(locals);
+        var firstData = result[0].data;
+        var firstPath = result[0].path;
+
+        firstData.should.contain(`<id>${hexo.config.url}${firstCategory}</id>`);
+        firstData.should.contain(`<link href="${hexo.config.url}${firstPath}" rel="self"`);
+        firstData.should.contain(`<link href="${hexo.config.url}/"/>`);
     });
 });
